@@ -79,7 +79,9 @@ public final class CalendarView: UIView {
   /// `Date` instances and use them as input to the `dayRangeItemProvider`.
   public var multiDaySelectionDragHandler: ((DayComponents, UIGestureRecognizer.State) -> Void)? {
     didSet {
-      configureMultiDaySelectionPanGestureRecognizer()
+        DispatchQueue.main.async {
+            self.configureMultiDaySelectionPanGestureRecognizer()
+        }
     }
   }
 
@@ -120,11 +122,13 @@ public final class CalendarView: UIView {
   public override var directionalLayoutMargins: NSDirectionalEdgeInsets {
     get { super.directionalLayoutMargins }
     set {
-      super.directionalLayoutMargins = NSDirectionalEdgeInsets(
-        top: max(newValue.top, 0),
-        leading: max(newValue.leading, 0),
-        bottom: max(newValue.bottom, 0),
-        trailing: max(newValue.trailing, 0))
+        DispatchQueue.main.async {
+            super.directionalLayoutMargins = NSDirectionalEdgeInsets(
+                top: max(newValue.top, 0),
+                leading: max(newValue.leading, 0),
+                bottom: max(newValue.bottom, 0),
+                trailing: max(newValue.trailing, 0))
+        }
     }
   }
 
@@ -138,7 +142,9 @@ public final class CalendarView: UIView {
 
   public override func layoutMarginsDidChange() {
     super.layoutMarginsDidChange()
-    setNeedsLayout()
+      DispatchQueue.main.async {
+          self.setNeedsLayout()
+      }
   }
 
   public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -150,7 +156,9 @@ public final class CalendarView: UIView {
     guard traitCollection.layoutDirection != previousTraitCollection?.layoutDirection else {
       return
     }
-    setNeedsLayout()
+      DispatchQueue.main.async {
+          self.setNeedsLayout()
+      }
   }
 
   public override func layoutSubviews() {
@@ -265,7 +273,9 @@ public final class CalendarView: UIView {
     }
 
     self.content = content
-    setNeedsLayout()
+      DispatchQueue.main.async {
+          self.setNeedsLayout()
+      }
 
     // If we're animating, force layout with the inherited animation closure or with our own default
     // animation. Forcing layout ensures that frame adjustments happen with an animation.
@@ -342,8 +352,10 @@ public final class CalendarView: UIView {
     if animated {
       startScrollingTowardTargetItem()
     } else {
-      setNeedsLayout()
-      layoutIfNeeded()
+        DispatchQueue.main.async {
+            self.setNeedsLayout()
+            self.layoutIfNeeded()
+        }
     }
   }
 
@@ -535,8 +547,10 @@ public final class CalendarView: UIView {
   private var initialItemViewWasFocused = false {
     didSet {
       guard initialItemViewWasFocused != oldValue else { return }
-      setNeedsLayout()
-      layoutIfNeeded()
+        DispatchQueue.main.async {
+            self.setNeedsLayout()
+            self.layoutIfNeeded()
+        }
     }
   }
 
@@ -919,9 +933,10 @@ public final class CalendarView: UIView {
     case .none:
       break
     }
-
-    setNeedsLayout()
-    layoutIfNeeded()
+      DispatchQueue.main.async {
+          self.setNeedsLayout()
+          self.layoutIfNeeded()
+      }
 
     // If we overshoot our target item, then finalize the animation immediately. In practice, this
     // will only happen if the maximum per-animation-tick offset is greater than the viewport size.
@@ -931,8 +946,10 @@ public final class CalendarView: UIView {
       finalizeScrollingTowardItem(for: scrollToItemContext)
 
       // Force layout immediately to prevent the overshoot from being visible to the user.
-      setNeedsLayout()
-      layoutIfNeeded()
+        DispatchQueue.main.async {
+            self.setNeedsLayout()
+            self.layoutIfNeeded()
+        }
 
     default:
       break
@@ -1301,8 +1318,10 @@ private final class ScrollViewDelegate: NSObject, UIScrollViewDelegate {
       // `scrollToItemContext` that might be leftover from the initial layout process.
       calendarView.scrollToItemContext = nil
     }
-
-    calendarView.setNeedsLayout()
+      DispatchQueue.main.async {
+          calendarView.setNeedsLayout()
+      }
+   
   }
 
   func scrollViewDidEndDragging(

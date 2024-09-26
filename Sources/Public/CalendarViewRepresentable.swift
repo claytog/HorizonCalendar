@@ -71,18 +71,20 @@ public struct CalendarViewRepresentable: UIViewRepresentable {
   }
 
   public func updateUIView(_ calendarView: CalendarView, context _: Context) {
-    calendarView.backgroundColor = backgroundColor ?? calendarView.backgroundColor
-    calendarView.directionalLayoutMargins = layoutMargins ?? calendarView.directionalLayoutMargins
-
-    calendarView.daySelectionHandler = daySelectionHandler
-    calendarView.multiDaySelectionDragHandler = multiDaySelectionDragHandler
-    calendarView.didScroll = didScroll
-    calendarView.didEndDragging = didEndDragging
-    calendarView.didEndDecelerating = didEndDecelerating
-
-    // There's no public API for inheriting the `context.transaction.animation`'s properties here so
-    // that we can do an equivalent `UIView` animation.
-    calendarView.setContent(makeContent(), animated: false)
+      DispatchQueue.main.async {
+          calendarView.backgroundColor = backgroundColor ?? calendarView.backgroundColor
+          calendarView.directionalLayoutMargins = layoutMargins ?? calendarView.directionalLayoutMargins
+          
+          calendarView.daySelectionHandler = daySelectionHandler
+          calendarView.multiDaySelectionDragHandler = multiDaySelectionDragHandler
+          calendarView.didScroll = didScroll
+          calendarView.didEndDragging = didEndDragging
+          calendarView.didEndDecelerating = didEndDecelerating
+          
+          // There's no public API for inheriting the `context.transaction.animation`'s properties here so
+          // that we can do an equivalent `UIView` animation.
+          calendarView.setContent(makeContent(), animated: false)
+      }
   }
 
   // MARK: Fileprivate
