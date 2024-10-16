@@ -147,6 +147,7 @@ public final class CalendarView: UIView {
       }
   }
 
+    @MainActor
   public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
     super.traitCollectionDidChange(previousTraitCollection)
 
@@ -156,9 +157,7 @@ public final class CalendarView: UIView {
     guard traitCollection.layoutDirection != previousTraitCollection?.layoutDirection else {
       return
     }
-      DispatchQueue.main.async {
-          self.setNeedsLayout()
-      }
+    self.setNeedsLayout()
   }
 
   public override func layoutSubviews() {
