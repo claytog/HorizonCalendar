@@ -147,17 +147,19 @@ public final class CalendarView: UIView {
       }
   }
 
-    @MainActor
   public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-    super.traitCollectionDidChange(previousTraitCollection)
-
-    // This can be called with a different trait collection instance, even if nothing in the trait
-    // collection has changed (noticed from SwiftUI). We guard against this to prevent and
-    // unnecessary layout pass.
-    guard traitCollection.layoutDirection != previousTraitCollection?.layoutDirection else {
-      return
-    }
-    self.setNeedsLayout()
+      DispatchQueue.main.async {
+          super.traitCollectionDidChange(previousTraitCollection)
+          
+          // This can be called with a different trait collection instance, even if nothing in the trait
+          // collection has changed (noticed from SwiftUI). We guard against this to prevent and
+          // unnecessary layout pass.
+          guard self.traitCollection.layoutDirection != previousTraitCollection?.layoutDirection else {
+              return
+          }
+          
+          self.setNeedsLayout()
+      }
   }
 
   public override func layoutSubviews() {
